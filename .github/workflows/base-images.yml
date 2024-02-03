@@ -2,10 +2,10 @@ name: Base Docker images for building
 
 on:
   push:
-    paths: [ 'docker/*' ]
+    paths: [ 'docker/*', '.github/workflows/base-images.yml' ]
   pull_request:
     branches: [ main ]
-    paths: [ 'docker/*' ]
+    paths: [ 'docker/*', '.github/workflows/base-images.yml' ]
 
 jobs:
   cuda-linux:
@@ -25,4 +25,4 @@ jobs:
     - name: Build Docker image
       run: |
         set -ex
-        docker build --push --platform linux/amd64,linux/arm64 --build-arg repo_name=${{ github.repository }} -t ghcr.io/${{ github.repository }}/cuda-linux:${{ matrix.cuda_version }} -f docker/cuda${{ matrix.cuda_version }}-linux.Dockerfile docker
+        docker buildx build --push --platform linux/amd64,linux/arm64 --build-arg repo_name=${{ github.repository }} -t ghcr.io/${{ github.repository }}/cuda-linux:${{ matrix.cuda_version }} -f docker/cuda${{ matrix.cuda_version }}-linux.Dockerfile docker
